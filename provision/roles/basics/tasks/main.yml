@@ -1,0 +1,13 @@
+---
+
+- name: init packages
+  include: packages.yml
+  tags: init
+
+- name: init locales
+  include: locales.yml
+  tags: init
+  
+- name: init firewall
+  include: iptables.yml
+  tags: init

@@ -1,0 +1,6 @@
+---
+
+- hosts: vm_front
+  become: true
+  roles:
+    - roles/frontend

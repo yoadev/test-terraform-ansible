@@ -1,0 +1,12 @@
+---
+
+timezone: Europe/Paris
+locale: fr_FR.UTF-8
+keymap: fr(latin9)
+language: fr
+country: FR
+keyboard_model: pc105
+keyboard_layout: fr
+keyboard_variant: 'latin9'
+keyboard_options: ''
+keyboard_backspace: guess

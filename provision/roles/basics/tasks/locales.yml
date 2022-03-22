@@ -1,0 +1,28 @@
+---
+
+- name: Check/Gen locale {{ locale }}
+  locale_gen:
+    name: "{{ locale }}"
+    state: present
+
+- name: Set timezone to {{ timezone }}
+  timezone:
+    name: "{{ timezone }}"
+
+- name: write keyboard configuration
+  template:
+    src: keyboards.j2
+    dest: /etc/default/keyboard
+    force: yes
+    owner: root
+    group: root
+    mode: 'u=rw,go=r'
+
+- name: update locale
+  command: "/usr/sbin/update-locale LANG={{ locale }} LC_ALL={{ locale }} LANGUAGE={{ locale }}"
+
+- name: update tzdata
+  command: /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
+
+- name: dpkg-reconfigure keyboard configuration
+  command: /usr/sbin/dpkg-reconfigure -f noninteractive keyboard-configuration

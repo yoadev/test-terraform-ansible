@@ -1,0 +1,15 @@
+---
+
+- name: apt update with cache
+  apt:
+    upgrade: yes
+    update_cache: yes
+  ignore_errors: yes
+
+- name: install base packages
+  package:
+    state: present
+    name:
+      - net-tools
+      - keyboard-configuration
+      - console-setup

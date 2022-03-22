@@ -1,0 +1,46 @@
+---
+
+- name: install iptables-persistent
+  apt:
+    name: iptables-persistent
+    state: present
+
+- name: Allow connections on tcp ports
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  with_items:
+    - 22
+    - 80
+
+- name: icmp accept
+  iptables:
+    chain: "{{ item }}"
+    protocol: icmp
+    jump: ACCEPT
+  with_items:
+    - "INPUT"
+    - "OUTPUT"
+
+- name: Allow related and established connections
+  iptables:
+    chain: "{{ item }}"
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+  with_items:
+    - "INPUT"
+    - "OUTPUT"
+
+- name: Policies to DROP / ACCEPT
+  iptables:
+    chain: "{{ item.chain }}"
+    policy: "{{ item.policy }}"
+  with_items:
+     - { chain: "OUTPUT", policy: "ACCEPT" }
+     - { chain: "INPUT", policy: "DROP" }
+     - { chain: "FORWARD", policy: "DROP" }
+
+- name: persist iptables rules
+  shell: iptables-save > /etc/iptables/rules.v4
